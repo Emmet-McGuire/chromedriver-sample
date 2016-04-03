@@ -10,7 +10,7 @@ a very simple version of this repo before we tack on some of the features we dis
 TODO:
 - [x] env variables
 - [x] init and end on each scenario
-- [ ] skip env tags
+- [x] skip env tags
 - [ ] docker
 
 To see it in action.
@@ -81,6 +81,18 @@ var config = {
 ```
 
 We would always have the user 'jonathan' but only have `googleHost` when the `env` is `live`. 
+
+## Skipping Scenarios in certain environments
+
+You may need to skip certain scnearios in certain environments. You will find the following in `features/worlds/envWorld.js`
+
+```js
+['dev', 'live'].forEach(skipEnv => {
+```
+
+You can modify the array to support any environments you want to support. 
+
+You can add the tag `@skip-{env}` where `env` is any environment you support, like `@skip-live`. And that scenario will be skipped when you specify that `env` through the cli args eg `--env=live`
 
 ## Pausing and Inspecting the Browser
 

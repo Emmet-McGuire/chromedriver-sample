@@ -50,4 +50,15 @@ module.exports = function(){
                 console.error(err);
             });
     });
+
+    ['dev', 'live'].forEach(skipEnv => {
+        this.Before(`@skip-${skipEnv}`, function (scenario, callback) {
+            if (env === skipEnv){
+                callback.pending();
+            }
+            else {
+                callback();
+            }
+        });
+    });
 };
