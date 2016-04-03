@@ -2,6 +2,10 @@ var webdriverio = require('webdriverio');
 var nopt = require('nopt');
 var cliArgs = nopt({}, {}, process.argv);
 
+// provide env with --env=live which will resolve to config in ./env.js
+var env = cliArgs.env || 'live';
+var config = require('./env')(env);
+
 // provide --logLevel=verbose at the command line to get verbose output
 var logLevel = cliArgs.logLevel || 'silent';
 
@@ -34,6 +38,7 @@ module.exports = function(){
 
     this.World = function(){
         this.browser = browser;
+        this.config = config;
     };
 
     this.registerHandler('AfterFeatures', function(event, callback) {
