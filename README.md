@@ -9,7 +9,7 @@ a very simple version of this repo before we tack on some of the features we dis
 
 TODO:
 - [x] env variables
-- [ ] init and end on each scenario
+- [x] init and end on each scenario
 - [ ] skip env tags
 - [ ] docker
 
@@ -89,3 +89,15 @@ troubleshooting why it works locally but not in the testing environment.
 
 I hope to expand this repo to show how I get this working in Docker, which then enables me to run the tests easily on
 a CI server like Jenkins.
+
+## Multi Scenario Tests
+
+Most often, you want a new browser session for every scenario. That is you want a clear cache, no cookies, and no page
+loaded. This is already set up for you leveraging `this.Around(...)` in `features/worlds/envWorld.js`. In some cases you
+may want the browser session to run for more than one scenario. Setting that up goes beyond the scope of this doc. But
+to set you up on the right path you basically need to know two things.
+
+You need to move webdriver.io's `init` and `end` calls to happen at the right time (see `this.Around(...)` in
+`features/worlds/envWorld.js`). The right time will be managed by cucumberjs [hooks](https://github.com/cucumber/cucumber-js#hooks). 
+
+Note: these types of tests are generally discouraged and you are probably better off with a very long scenario. 

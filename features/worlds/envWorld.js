@@ -28,7 +28,6 @@ module.exports = function(){
             coloredLogs: true,
             waitforTimeout : 10000
         })
-        .init()
         .then(() => callback())
         .catch(function (err) {
             console.error('Failed to start webdriverio connecting to: localhost:4444/ \nwith error:', err);
@@ -41,7 +40,14 @@ module.exports = function(){
         this.config = config;
     };
 
-    this.registerHandler('AfterFeatures', function(event, callback) {
-        browser.end().then(() => callback());
+    this.Around(function (scenario, runScenario) {
+        browser.init().then(function () {
+                runScenario(null, () => {
+                    return browser.end();
+                });
+            })
+            .catch(function (err) {
+                console.error(err);
+            });
     });
 };
