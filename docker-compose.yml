@@ -1,0 +1,15 @@
+acceptance-tests:
+    image: node:5
+    entrypoint: node ./docker-entry.js --chromedriverHost=chromedriver.docker
+    volumes:
+     - ./:/workspace/
+    working_dir: /workspace/
+    links:
+     - chromedriver:chromedriver.docker
+
+chromedriver:
+    image: robcherry/docker-chromedriver:latest
+    ports:
+     - "4444:4444"
+    environment:
+     - CHROMEDRIVER_WHITELISTED_IPS=''

@@ -7,21 +7,23 @@ acceptance tests easier.
 If you are brand new to cucumberjs, webdriver.io, or chromedriver - feel free to checkout the [simple](https://github.com/jhoguet/chromedriver-sample/tree/simple) branch to see
 a very simple version of this repo before we tack on some of the features we discuss later.
 
-TODO:
-- [x] env variables
-- [x] init and end on each scenario
-- [x] skip env tags
-- [ ] docker
-
-To see it in action.
+## Getting Started (Just Node)
 
     npm install
     npm run start-local-chromedriver
 
-
 in another terminal
 
     npm run acceptance-tests -- --env=live
+    
+## Getting Started (Docker)
+
+	docker-compose run acceptance-tests --env=live
+
+## Getting Started (Docker with local Chromedriver)
+
+    npm run start-local-chromedriver
+	docker-compose run acceptance-tests:local --env=live
 
 ## Environments
 Often times we need to be able to run our tests against multiple environments. We accomplish this by putting our environment variables in `features/worlds/env.js`. 
@@ -102,6 +104,8 @@ troubleshooting why it works locally but not in the testing environment.
 I hope to expand this repo to show how I get this working in Docker, which then enables me to run the tests easily on
 a CI server like Jenkins.
 
+## Running a Single Scenario / Feature
+
 ## Multi Scenario Tests
 
 Most often, you want a new browser session for every scenario. That is you want a clear cache, no cookies, and no page
@@ -113,3 +117,13 @@ You need to move webdriver.io's `init` and `end` calls to happen at the right ti
 `features/worlds/envWorld.js`). The right time will be managed by cucumberjs [hooks](https://github.com/cucumber/cucumber-js#hooks). 
 
 Note: these types of tests are generally discouraged and you are probably better off with a very long scenario. 
+
+## Docker
+
+This repo / pattern doesn't need Docker, but it supports Docker. 
+
+Docker enables us to run with a background browser on our local machine, and can also be run on CI servers. 
+
+But, Docker adds a layer of complexity and has and requires a significant initial investment. When you're ready for docker, here is what you need to know: 
+
+1. **node_modules** be careful that you don't install node_modules locally using one version of node/ npm and then try and run in the container. The container (possibly running a different version of node) will see the node_modules already exist and try to use them. This is especially problematic for any node_modules that do any compiling against the local machine. This will then be problematic when the binaries compiled against your mac don't work with the linux docker container. This will rarely be a problem, but when in doubt, simple `rm -rf node_modules` 

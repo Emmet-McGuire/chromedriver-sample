@@ -19,7 +19,7 @@ module.exports = function(){
 
         browser = webdriverio.remote({
             desiredCapabilities: { browserName: "chrome" },
-            host: 'localhost',
+            host: cliArgs.chromedriverHost || 'localhost',
             port: 4444,
             path : '/',
 
