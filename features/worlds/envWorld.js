@@ -9,21 +9,21 @@ var config = require('./env')(env);
 // provide --logLevel=verbose at the command line to get verbose output
 var logLevel = cliArgs.logLevel || 'silent';
 
+// provide --chromedriverHost=somehost to override the host (eg to docker)
+var chromedriverHost = getChromedriverHost();
+
 module.exports = function(){
     this.setDefaultTimeout(5 * 60 * 1000);
 
     var browser;
 
     this.registerHandler('BeforeFeatures', function(event, callback) {
-        // provide --chromedriverHost=somehost to override the host (eg to docker)
 
         browser = webdriverio.remote({
             desiredCapabilities: { browserName: "chrome" },
-            host: cliArgs.chromedriverHost || 'localhost',
+            host: chromedriverHost,
             port: 4444,
             path : '/',
-
-            // provide --logLevel=verbose at the command line to get verbose output
             logLevel :logLevel,
             coloredLogs: true,
             waitforTimeout : 10000
@@ -62,3 +62,18 @@ module.exports = function(){
         });
     });
 };
+
+
+function getChromedriverHost(){
+    // if there is more than one, the last one wins
+    if (Array.isArray(cliArgs.chromedriverHost)){
+        return cliArgs.chromedriverHost[cliArgs.chromedriverHost.length -1];
+    }
+    else if (cliArgs.chromedriverHost){
+        return cliArgs.chromedriverHost
+    }
+    else if (process.env.chromedriverHost){
+        return process.env.chromedriverHost;
+    }
+    return 'localhost';
+}

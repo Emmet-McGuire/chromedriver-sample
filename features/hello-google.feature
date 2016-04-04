@@ -3,4 +3,5 @@ Feature: Demonstrate how to use cucumber, chromedriver, and webdriverio for acce
   Scenario: Go Google
     When I go to "/"
     Then I should be able to search
-    #Then pause #uncomment this to line to see that you can inspect / interact with the browser
+    #uncomment the next line to see that you can inspect / interact with the browser
+#    Then pause

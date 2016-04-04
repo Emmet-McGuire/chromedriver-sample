@@ -4,8 +4,7 @@
   "description": "sample app demonstrating how you can use chromedriver, cucumber, and webdriverio together",
   "scripts": {
     "acceptance-tests": "node_modules/.bin/cucumber.js -f pretty -r ./features/worlds/envWorld.js -r ./features/steps/ ./features/",
-    "start-local-chromedriver": "npm install chromedriver && node_modules/.bin/chromedriver --port=4444 --whitelisted-ips=''",
-    "docker:acceptance-tests": "npm install && npm run acceptance-tests -- --chromedriverHost=chromedriver.docker"
+    "start-local-chromedriver": "npm install chromedriver && node_modules/.bin/chromedriver --port=4444 --whitelisted-ips=''"
   },
   "keywords": [
     "cucumber",

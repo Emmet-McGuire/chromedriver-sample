@@ -19,11 +19,18 @@ in another terminal
 ## Getting Started (Docker)
 
 	docker-compose run acceptance-tests --env=live
+    
+After you've done this the first time - you can add `--skip-install` to avoid the time consuming `npm install` step
 
 ## Getting Started (Docker with local Chromedriver)
 
     npm run start-local-chromedriver
-	docker-compose run acceptance-tests:local --env=live
+	docker-compose run acceptance-tests --chromedriverHost={your-ip} --env=live
+    
+where `{your-ip}` is accesible from the container, therefore `localhost` is NOT an option :( But here is a command that will find your IP for you. 
+    
+    docker-compose run acceptance-tests --chromedriverHost=$(host $(hostname) | head -n 1 | awk '{print $4}') --env=live
+
 
 ## Environments
 Often times we need to be able to run our tests against multiple environments. We accomplish this by putting our environment variables in `features/worlds/env.js`. 
@@ -127,3 +134,4 @@ Docker enables us to run with a background browser on our local machine, and can
 But, Docker adds a layer of complexity and has and requires a significant initial investment. When you're ready for docker, here is what you need to know: 
 
 1. **node_modules** be careful that you don't install node_modules locally using one version of node/ npm and then try and run in the container. The container (possibly running a different version of node) will see the node_modules already exist and try to use them. This is especially problematic for any node_modules that do any compiling against the local machine. This will then be problematic when the binaries compiled against your mac don't work with the linux docker container. This will rarely be a problem, but when in doubt, simple `rm -rf node_modules` 
+2. **slower because of npm install** if you're running in the container over and over again (eg iterating on a test). Then it will be much slower, not really because of docker, but because it needs to install every time. We could probably find some way to detect and only npm install if we need to (which npm does quite slowly), but for now simply remove 
